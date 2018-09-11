@@ -1,0 +1,18 @@
+// 背景图片
+bg-image($url){
+  background-image: url($url +".jpg")
+}
+
+
+// 不换行
+no-wrap($num){
+  // text-overflow: ellipsis
+  // overflow: hidden
+  // white-space: nowrap
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $num;
+  -webkit-box-orient: vertical;
+}
+
