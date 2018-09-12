@@ -2,7 +2,7 @@
     <div class="box">
         <p class="smtitle">歌曲列表</p>
         <ul class="list">
-            <li class="item" v-for="(item,index) of list" :key=item.id @click='play(item)'>
+            <li class="item" v-for="(item,index) of list" :key=item.id @click='play(item,index)'>
                 <div class="count">
                     {{index+1}}
                 </div>
@@ -25,9 +25,8 @@ export default {
         }
     },
     methods:{
-        play(item){
-            console.log(item)
-            this.$emit('play',item)
+        play(item,index){
+            this.$emit('play',item,index)
         }
     }
 }
@@ -44,6 +43,7 @@ export default {
             background-color: #eeeff0;
         }
         .list{
+            padding-bottom 70px
             .item{
                 margin-top 10px
                 display flex

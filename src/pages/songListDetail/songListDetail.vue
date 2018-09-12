@@ -9,7 +9,7 @@
     </div>
 </template>
 <script>
-import {mapMutations} from 'vuex'
+import {mapMutations,mapState} from 'vuex'
 import BoHeader from './components/detailPageHeader'
 import BoBanner from './components/banner'
 import BoList from './components/list'
@@ -33,6 +33,9 @@ export default {
                 desc:''
             }
         }
+    },
+    computed:{
+        ...mapState(['playing'])
     },
     created(){
         this.getSonglist()
@@ -58,11 +61,18 @@ export default {
                 item.singerlist = filterSinger(item.ar)
             })
         },
-        play(item){
+        play(item,index){
+            let url = ''
             this.playList(this.list)
+            this.currentIndex(index)
+            this.fullScreenFn(true)
+            this.playingFn(true)
         },
         ...mapMutations({
-            playList:'playList'
+            playList:'playList',
+            currentIndex:'currentIndex',
+            fullScreenFn:'fullScreen',
+            playingFn:'playing'
         })
     }
 }

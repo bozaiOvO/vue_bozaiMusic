@@ -65,6 +65,9 @@ export default {
 </script>
 <style scoped lang='stylus'>
 @import "~@/common/css/mixin.styl"
+    .page{
+        padding-bottom 70px
+    }
     .songs-list{
         display flex
         justify-content space-around

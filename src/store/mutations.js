@@ -16,5 +16,8 @@ export default{
     },
     currentIndex(state,index){
         state.currentIndex = index
+    },
+    currentMp3(state,url){
+        state.currentMp3 = url
     }
 }

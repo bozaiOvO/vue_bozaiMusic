@@ -1,11 +1,11 @@
 <template>
     <div class="header">
-        <div class="down">
+        <div class="down" @click='miniShow'>
             <i class="iconfont">&#xe665;</i>
         </div>
         <div class="text">
-            <p class="title">{{headerObj.title}}</p>
-            <p class="author">{{headerObj.author}}</p>
+            <p class="title">{{headerObj.name}}</p>
+            <p class="author">{{headerObj.singerlist}}</p>
         </div>
     </div>
 </template>
@@ -16,10 +16,15 @@ export default {
             type:Object,
             default:function(){
                 return {
-                    title:'还没有收到数据',
-                    author:'-'
+                    name:'还没有收到数据',
+                    singerlist:'-'
                 }
             }
+        }
+    },
+    methods:{
+        miniShow(){
+            this.$emit('miniShow')
         }
     }
 }
