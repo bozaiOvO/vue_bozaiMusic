@@ -13,7 +13,15 @@ function getMp3(id){
         method:'get'
     })
 }
+function getLyric(id){
+    return request({
+        url:'api/lyric',
+        params:{id},
+        method:'get'
+    })
+}
 export default{
     getSonglist,
-    getMp3
+    getMp3,
+    getLyric
 }

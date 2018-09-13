@@ -6,7 +6,12 @@
              @miniShow=miniShow
              ></bo-header>
             <bo-filter-bg :bg=currentSong.al.picUrl></bo-filter-bg>
-            <bo-middle :currentSong=currentSong></bo-middle>
+            <bo-middle 
+            :currentSong=currentSong
+            :lyricArr=lyricArr
+            :currentLyric=currentLyric
+            :countLyric=countLyric
+            ></bo-middle>
             <bo-progress-bar
             :duration=duration
             :currentTime=currentTime
@@ -38,6 +43,7 @@
     </div>
 </template>
 <script>
+ import Lyric from 'lyric-parser'
 import {mapState,mapGetters,mapMutations} from 'vuex'
 import BoHttp from '@/api/detailPage'
 import BoHeader from './components/header'
@@ -60,7 +66,11 @@ export default {
             duration:0,//代表音频总长
             currentTime:0,//现在播放到哪里
             currentTimeStr:'',
-            durationStr:''
+            durationStr:'',
+            lyricArr:[],//歌词部分
+            currentLyric:'',
+            countLyric:0,
+            lyricObj:null
         }
     },
     computed:{
@@ -101,6 +111,9 @@ export default {
             let currentT = this.duration*time
             console.log(currentT)
             this.$refs.audio.currentTime = currentT
+            if(this.lyricObj){
+                this.lyricObj.seek(currentT*1000)
+            }
         },
         setAudioUrl(res){
             let url = res.data.data[0].url
@@ -112,8 +125,25 @@ export default {
                 })
             }
         },
+        getLyric(res){
+            let lyric = res.data.lrc.lyric
+            this.lyricObj = new Lyric(lyric,this.handleLyric)
+            this.lyricArr=this.lyricObj.lines
+            console.log(this.lyricArr)
+            if(this.playing){
+                this.lyricObj.play()
+            }
+        },
+        handleLyric({lineNum, txt}){
+            console.log(txt)
+            this.countLyric = lineNum
+			this.currentLyric = txt
+        },
         setPlaying(){
             this.playingFn(!this.playing) 
+            if(this.lyricObj){
+                this.lyricObj.togglePlay()
+			}
         },
         previousSong(){
             this.currentIndexFn(this.currentIndex-1)
@@ -154,11 +184,19 @@ export default {
             if(oldI==newI){
                 return 
             }
+            console.log(this.lyricObj)
+            if(this.lyricObj){
+                this.lyricObj.stop()
+            }
             let id = this.playList[newI].id
             BoHttp.getMp3(id)
             .then(res=>{
-                this.setAudioUrl(res)
                 console.log(res)
+                this.setAudioUrl(res)
+            })
+            BoHttp.getLyric(id)
+            .then(res=>{
+                this.getLyric(res)
             })
         },
         playing(isPlay){

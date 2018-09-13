@@ -12,16 +12,30 @@
                 </div>
             </swiper-slide>
             <swiper-slide>
-                <div class="middle-r">
-                    111
-                </div>
+                <bo-scroll ref='scrollLyric' class="scroll">
+                    <div class="middle-r">
+                        <p 
+                        v-for="(item,index) of lyricArr" 
+                        :class="{'active':index-1==countLyric}"
+                        ref=lyricArray
+                        :key=item.time>
+                            {{item.txt}}
+                        </p>
+                    </div>
+                </bo-scroll>
+                 
+                
             </swiper-slide>
         </swiper>
         <div class="swiper-pagination"></div> 
     </div>
 </template>
 <script>
+import BoScroll from '@/components/scroll/scroll'
 export default {
+    components:{
+        BoScroll
+    },
     data(){
         return {
             swiperOption:{
@@ -34,8 +48,27 @@ export default {
     props:{
         currentSong:{
             type:Object
+        },
+        countLyric:{
+            type:Number
+        },
+        currentLyric:{
+            type:String
+        },
+        lyricArr:{
+            type:Array
         }
-    }
+    },
+    watch:{
+        countLyric(){
+            if(this.countLyric>5){
+                let numEl = this.$refs.lyricArray[this.countLyric-5]
+                this.$refs.scrollLyric.scrollToElement(numEl,500)
+            }else{
+                this.$refs.scrollLyric.scrollTo(0,0)
+            }
+        }
+	} 
 }
 </script>
 <style lang="stylus" scoped>
@@ -56,6 +89,19 @@ export default {
                         width 100%
                         height 100%
                     }
+                }
+            }
+            .scroll{
+                height 100%
+                p{
+                    line-height 1.5
+                    padding 7px 0
+                    color #ff6700
+                    font-size 14px
+                    text-align center
+                }
+                p.active{
+                    color red
                 }
             }
         }
