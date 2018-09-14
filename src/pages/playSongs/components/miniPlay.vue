@@ -12,13 +12,15 @@
                 <i class="iconfont" v-if='playing'>&#xe62e;</i>
                  <i class="iconfont" v-else>&#xe664;</i>
             </li>
-            <li class="control">
+            <li class="control" @click.stop=showMiniList>
                 <i class="iconfont">&#xe603;</i>
             </li>
         </ul>
+        
     </div>
 </template>
 <script>
+
 export default {
     props:{
         currentSong:{
@@ -33,6 +35,9 @@ export default {
         },
         setPlaying(){
             this.$emit('setPlaying')
+        },
+        showMiniList(){
+            this.$emit('showMiniList')
         }
     }
 }

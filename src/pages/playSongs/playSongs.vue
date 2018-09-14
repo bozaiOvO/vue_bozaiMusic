@@ -37,14 +37,24 @@
              :currentSong=currentSong
              @fullScreenShow=fullScreenShow
              @setPlaying=setPlaying
+             @showMiniList=showMiniList
              ></bo-mini-play>
         </div>
+        <bo-mini-list 
+        v-show='isMiniListShow'
+        @closeMiniList=closeMiniList
+        @toggleMode=toggleMode
+        @clearPlayList=clearPlayList
+        @playThisSong=playThisSong
+        @clearThisSong=clearThisSong
+        :mode=mode
+        ></bo-mini-list>
         <audio :src="currentMp3" ref='audio'   @timeupdate=timeupdate @ended=ended></audio>
     </div>
 </template>
 <script>
  import Lyric from 'lyric-parser'
-import {mapState,mapGetters,mapMutations} from 'vuex'
+import {mapState,mapGetters,mapMutations,mapActions} from 'vuex'
 import BoHttp from '@/api/detailPage'
 import BoHeader from './components/header'
 import BoFilterBg from './components/filter'
@@ -52,6 +62,8 @@ import BoMiddle from './components/middle'
 import BoProgressBar from './components/progressBar'
 import BoBottom from './components/bottom'
 import BoMiniPlay from './components/miniPlay'
+import BoMiniList from './components/miniList'
+import {randomList} from '@/common/js/random'
 export default {
     components:{
         BoHeader,
@@ -59,7 +71,8 @@ export default {
         BoMiddle,
         BoProgressBar,
         BoBottom,
-        BoMiniPlay
+        BoMiniPlay,
+        BoMiniList
     },
     data(){
         return {
@@ -70,7 +83,8 @@ export default {
             lyricArr:[],//歌词部分
             currentLyric:'',
             countLyric:0,
-            lyricObj:null
+            lyricObj:null,
+            isMiniListShow:true
         }
     },
     computed:{
@@ -82,7 +96,6 @@ export default {
     },
     methods:{
         timeupdate(e){
-            // console.log(e)
             this.duration = e.target.duration
             this.currentTime = e.target.currentTime
             this.durationStr = this.format(this.duration)
@@ -95,6 +108,14 @@ export default {
                 this.nextSong()
             }
         },
+        loop(){
+            this.$refs.audio.currentTime = 0
+            this.$refs.audio.play()
+            this.setPlaying(true)
+            if (this.lyricObj) {
+                this.lyricObj.seek(0)
+            }
+		},
         fullScreenShow(){
             this.fullScreenFn(true)
         },
@@ -155,11 +176,24 @@ export default {
         },
         toggleMode(){
             let count = this.mode
+            let list 
             count++
             if(count>2){
                 count = 0
             }
             this.setMode(count)
+            if(count==2){
+                console.log(this.playList)
+              list = randomList(this.playList)
+              this.setIndex(list)
+              this.playListFn(list)
+            }
+        },
+        setIndex(arr){
+            let index = arr.findIndex((item)=>{
+                return item.id == this.currentSong.id
+            })
+            this.currentIndexFn(index)
         },
         format(time){
             let time1 = Math.floor(time)
@@ -171,12 +205,45 @@ export default {
             }
             return minute +':'+second
         },
+        closeMiniList(){
+            this.isMiniListShow=false
+        },
+        showMiniList(){
+            this.isMiniListShow=true
+        },
+        clearPlayList(){
+            //关闭全部
+        },
+        playThisSong({item,index}){
+            this.currentIndexFn(index)
+            this.playingFn(true)
+        },
+        clearThisSong(song){
+            let list = this.playList
+            list.forEach((item,index) => {
+                if(item.id==song.id){
+                    this.spliceList(index)
+                    if(index==this.currentIndex){
+                        this.playingFn(false)
+                        console.log('在'+index)
+                        this.currentIndexFn(index+1)
+                        this.playingFn(true)
+                    }
+                    
+                }
+            });
+        },
         ...mapMutations({
             playingFn:'playing',
+            playListFn:'playList',
             currentMp3Fn:'currentMp3',
             currentIndexFn:'currentIndex',
             setMode:'mode',
-            fullScreenFn:'fullScreen'
+            fullScreenFn:'fullScreen',
+            spliceList:'spliceList'
+        }),
+        ...mapActions({
+            selectPlayFn:'selectPlay'
         })
     },
     watch:{

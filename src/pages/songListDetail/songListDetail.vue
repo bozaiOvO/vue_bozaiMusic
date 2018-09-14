@@ -3,13 +3,13 @@
         <bo-header :title='title'></bo-header>
         <bo-banner :bannerObj='bannerObj'></bo-banner>
         <bo-list
-         :list='list'
+         :list='songList'
          @play='play'
          ></bo-list>
     </div>
 </template>
 <script>
-import {mapMutations,mapState} from 'vuex'
+import {mapMutations,mapState,mapActions} from 'vuex'
 import BoHeader from './components/detailPageHeader'
 import BoBanner from './components/banner'
 import BoList from './components/list'
@@ -35,7 +35,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(['playing'])
+        ...mapState(['playing','songList'])
     },
     created(){
         this.getSonglist()
@@ -56,24 +56,29 @@ export default {
             this.bannerObj.author = res.data.playlist.creator.nickname
             this.bannerObj.desc = res.data.playlist.description
             this.bannerObj.photo = res.data.playlist.creator.avatarUrl
-            this.list = res.data.playlist.tracks
-            this.list.forEach((item)=>{
+            // this.list = res.data.playlist.tracks
+            this.songListFn(res.data.playlist.tracks)
+            // this.list = this.songList
+            this.songList.forEach((item)=>{
                 item.singerlist = filterSinger(item.ar)
             })
         },
         play(item,index){
-            let url = ''
-            this.playList(this.list)
-            this.currentIndex(index)
-            this.fullScreenFn(true)
-            this.playingFn(true)
+            this.selectPlay({
+                list:this.songList,
+                index:index
+            })
         },
         ...mapMutations({
             playList:'playList',
             currentIndex:'currentIndex',
             fullScreenFn:'fullScreen',
-            playingFn:'playing'
-        })
+            playingFn:'playing',
+            songListFn:'songList'
+        }),
+        ...mapActions([
+            'selectPlay'
+        ])
     }
 }
 </script>

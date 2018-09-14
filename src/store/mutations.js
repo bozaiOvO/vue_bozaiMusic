@@ -19,5 +19,11 @@ export default{
     },
     currentMp3(state,url){
         state.currentMp3 = url
+    },
+    songList(state,list){
+        state.songList = list
+    },
+    spliceList(state,index){
+        state.playList.splice(index,index+1)
     }
 }
