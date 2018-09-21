@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Recommend from '@/pages/recommend/recommend'
 import Singer from '@/pages/singer/singer'
 import Rank from '@/pages/rank/rank'
+import My from '@/pages/my/my'
 import SongListDetail from '@/pages/songListDetail/songListDetail'
 Vue.use(Router)
 
@@ -29,6 +30,10 @@ export default new Router({
     {
       path:'/rank',
       component:Rank
+    },
+    {
+      path:'/my',
+      component:My
     }
   ]
 })

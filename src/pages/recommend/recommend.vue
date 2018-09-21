@@ -35,12 +35,19 @@
     </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 import boHttp from '@/api/recommend'
+import boHttpLogin from '@/api/loginRecommend'
 import {filterSinger} from '@/common/js/filter'
 import BoTitle from './components/title'
 export default {
     components:{
         BoTitle
+    },
+    computed:{
+        ...mapState({
+            userId:state=>state.loginModule.userId
+        })
     },
     data(){
         return{
@@ -49,15 +56,30 @@ export default {
         }
     },
     created(){
-        boHttp.getRecommendSongsList().then(res=>{
-            this.songslist=res.data.result
-        })
-        boHttp.getRecommendSongList().then(res=>{
-            this.songlist = res.data.result
-            this.songlist.forEach((item)=>{
-                item.singerlist= filterSinger(item.song.artists)
+        if(this.userId){
+            boHttpLogin.getRecommendSongsList().then(res=>{
+                this.songslist=res.data.recommend
             })
-        })
+            boHttpLogin.getRecommendSongList().then(res=>{
+                console.log('fff')
+                console.log(res)
+                this.songlist = res.data.result
+                this.songlist.forEach((item)=>{
+                    item.singerlist= filterSinger(item.song.artists)
+                })
+            })
+        }else{
+            boHttp.getRecommendSongsList().then(res=>{
+                this.songslist=res.data.result
+            })
+            boHttp.getRecommendSongList().then(res=>{
+                this.songlist = res.data.result
+                this.songlist.forEach((item)=>{
+                    item.singerlist= filterSinger(item.song.artists)
+                })
+            })
+        }
+       
     },
     methods:{
     }

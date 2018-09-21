@@ -5,6 +5,7 @@ import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 import createLogger from 'vuex/dist/logger'
+import {loginModule} from './module/moduleLogin/index'
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV!=='production'
 export default ()=>{
@@ -14,7 +15,10 @@ export default ()=>{
         getters,
         actions,
         strict:debug,
-        plugins:debug?[createLogger()]:[]       
+        plugins:debug?[createLogger()]:[] ,
+        modules:{
+            loginModule
+        }      
     })
     if(module.hot){
         module.hot.accept([
@@ -30,7 +34,7 @@ export default ()=>{
                 state:newState,
                 getters:newGetters,
                 mutations:newMutation,
-                actions:newActions
+                actions:newActions,
             })
             
         })

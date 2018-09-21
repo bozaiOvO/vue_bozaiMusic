@@ -225,7 +225,6 @@ export default {
                     this.spliceList(index)
                     if(index==this.currentIndex){
                         this.playingFn(false)
-                        console.log('在'+index)
                         this.currentIndexFn(index+1)
                         this.playingFn(true)
                     }
@@ -251,14 +250,12 @@ export default {
             if(oldI==newI){
                 return 
             }
-            console.log(this.lyricObj)
             if(this.lyricObj){
                 this.lyricObj.stop()
             }
             let id = this.playList[newI].id
             BoHttp.getMp3(id)
             .then(res=>{
-                console.log(res)
                 this.setAudioUrl(res)
             })
             BoHttp.getLyric(id)

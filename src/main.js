@@ -4,12 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'lib-flexible'
-import FastClick from 'fastclick'
+// import FastClick from 'fastclick'
 import store from './store/index'
 import './common/css/index.styl'
 import './common/css/font/iconfont.styl'
-FastClick.attach(document.body);
-Vue.config.productionTip = false
+// FastClick.attach(document.body);
+// Vue.config.productionTip = false
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'
  
@@ -28,7 +28,7 @@ Vue.use(VueLazyload, {
   // error: 'dist/error.png',
   // loading: 'dist/loading.gif',
   loading:'@/assets/loading.gif',
-  attempt: 1
+  attempt: 1.5
 })
 
 import axios from 'axios'

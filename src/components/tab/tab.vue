@@ -28,6 +28,10 @@ export default {
                 {
                     title:"歌手",
                     url:'/singer'
+                },
+                {
+                    title:'我的',
+                    url:'/my'
                 }
             ],
             currentIndex:0
