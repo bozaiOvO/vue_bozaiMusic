@@ -11,5 +11,8 @@ export default{
         commit('currentIndex',index)
         commit('fullScreen',true)
         commit('playing',true)
+    },
+    clearThisSong({state,commit},index){
+        commit('spliceList',index)
     }
 }

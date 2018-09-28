@@ -35,7 +35,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(['playing','songList'])
+        ...mapState(['playing','songList','playList'])
     },
     created(){
         this.getSonglist()
@@ -44,8 +44,11 @@ export default {
         getSonglist(){
             BoHttp.getSonglist(this.$route.params.id)
             .then((res)=>{
-                console.log(res)
-                this.dataFilter(res)
+                if(res.status==200){
+                    console.log(res)
+                    this.dataFilter(res)
+                }
+                
             })
         },
         dataFilter(res){
@@ -56,21 +59,25 @@ export default {
             this.bannerObj.author = res.data.playlist.creator.nickname
             this.bannerObj.desc = res.data.playlist.description
             this.bannerObj.photo = res.data.playlist.creator.avatarUrl
+            var list = res.data.playlist.tracks.slice(0)
+             var list1 = res.data.playlist.tracks.slice(0)
             // this.list = res.data.playlist.tracks
-            this.songListFn(res.data.playlist.tracks)
+            this.songListFn(list)
             // this.list = this.songList
+            this.playListFn(list1)
             this.songList.forEach((item)=>{
                 item.singerlist = filterSinger(item.ar)
             })
         },
-        play(item,index){
+        play(list,index){
+            var list = list.slice(0)
             this.selectPlay({
-                list:this.songList,
+                list,
                 index:index
             })
         },
         ...mapMutations({
-            playList:'playList',
+            playListFn:'playList',
             currentIndex:'currentIndex',
             fullScreenFn:'fullScreen',
             playingFn:'playing',

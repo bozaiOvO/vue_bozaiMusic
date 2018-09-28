@@ -1,5 +1,5 @@
 <template>
-    <div id="play" v-show=playList.length>
+    <div id="play" v-if=playList.length>
         <div class="full-screen" v-show=fullScreen>
             <bo-header
              :headerObj=currentSong
@@ -87,11 +87,12 @@ export default {
             isMiniListShow:true
         }
     },
+   
     computed:{
         percentage(){
            return this.currentTime/this.duration
         },
-        ...mapState(['playList','fullScreen','currentMp3','playing','currentIndex','mode']),
+        ...mapState(['playList','songList','fullScreen','currentMp3','playing','currentIndex','mode']),
         ...mapGetters(['currentSong'])
     },
     methods:{
@@ -222,8 +223,10 @@ export default {
             let list = this.playList
             list.forEach((item,index) => {
                 if(item.id==song.id){
-                    this.spliceList(index)
+                    this.clearThisSongAc(index)
+                    console.log(index)
                     if(index==this.currentIndex){
+                         console.log('index '+ index,this.currentIndex)
                         this.playingFn(false)
                         this.currentIndexFn(index+1)
                         this.playingFn(true)
@@ -242,7 +245,8 @@ export default {
             spliceList:'spliceList'
         }),
         ...mapActions({
-            selectPlayFn:'selectPlay'
+            selectPlayFn:'selectPlay',
+            clearThisSongAc:'clearThisSong'
         })
     },
     watch:{

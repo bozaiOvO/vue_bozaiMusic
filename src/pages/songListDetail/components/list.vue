@@ -26,7 +26,7 @@ export default {
     },
     methods:{
         play(item,index){
-            this.$emit('play',item,index)
+            this.$emit('play',this.list,index)
         }
     }
 }

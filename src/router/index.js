@@ -16,12 +16,12 @@ export default new Router({
     {
       path:'/recommend',
       component:Recommend,
-      children:[
-        {
-          path:':id',
-          component:SongListDetail
-        }
-      ]
+      // children:[
+      //   {
+      //     path:':id',
+      //     component:SongListDetail
+      //   }
+      // ]
     },
     {
       path:'/singer',
@@ -34,6 +34,17 @@ export default new Router({
     {
       path:'/my',
       component:My
+    },
+    {
+      path:'/songs/:id',
+      component:SongListDetail,
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })

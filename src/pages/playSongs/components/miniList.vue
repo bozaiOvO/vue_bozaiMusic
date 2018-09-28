@@ -39,7 +39,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(['playList'])
+        ...mapState(['playList','songList'])
     },
     components:{
         BoScroll

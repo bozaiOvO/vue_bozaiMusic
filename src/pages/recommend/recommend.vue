@@ -2,7 +2,7 @@
     <div class="page">
         <bo-title title=推荐歌单></bo-title>
         <ul class="songs-list">
-            <router-link tag="li" :to="'/recommend/'+item.id" class="item" v-for='item of songslist.slice(0,9)' :key=item.id >
+            <router-link tag="li" :to="'/songs/'+item.id" class="item" v-for='item of songslist.slice(0,9)' :key=item.id >
                 <div class="img">
                     <div class="mask"></div>
                     <img v-lazy=item.picUrl alt="">

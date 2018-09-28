@@ -2,10 +2,8 @@
     <div>
         <ul class="tab-list">
             <li class="item" 
-            v-for="(item,index) of list" 
-            :key=item.title 
-            :class="{active:index==currentIndex}"
-            @click='handleClick(index)'
+            v-for="item of list" 
+            :key=item.title
             >
                 <router-link :to=item.url>{{item.title}}</router-link>
             </li>
@@ -33,13 +31,7 @@ export default {
                     title:'我的',
                     url:'/my'
                 }
-            ],
-            currentIndex:0
-        }
-    },
-    methods:{
-        handleClick(index){
-            this.currentIndex = index
+            ]
         }
     }
 }
@@ -65,6 +57,10 @@ export default {
         color #fff
         font-weight bold
         
+    }
+    .router-link-active{
+        color #fff
+        font-weight bold
     }
 </style>
 

@@ -24,6 +24,6 @@ export default{
         state.songList = list
     },
     spliceList(state,index){
-        state.playList.splice(index,index+1)
+        state.playList.splice(index,1)
     }
 }

@@ -34,6 +34,7 @@ export default {
    methods:{
        handleRemoveUser(){
            this.removeUser()
+           sessionStorage.removeItem('bozaiMusicId')
        },
        ...mapMutations('loginModule',[,
             'removeUser'
